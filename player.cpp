@@ -11,6 +11,7 @@
 #include <QTime>
 #include <QSpinBox>
 #include <QDataStream>
+#include <QDebug>
 
 Player::Player(QWidget *parent)
     : QWidget(parent)
@@ -19,7 +20,6 @@ Player::Player(QWidget *parent)
     ui->setupUi(this);
     player = new QMediaPlayer(this);
     playlist = new QMediaPlaylist(player);
-    videoWidget = new QVideoWidget(ui->widget);
 
     this->readMap();
     this->setPlaylist();
@@ -82,6 +82,7 @@ void Player::setPlaylist()
 
 void Player::video()
 {
+    videoWidget = new QVideoWidget(ui->widget);
     player->setVideoOutput(videoWidget);
     videoWidget->resize(ui->widget->size());
     videoWidget->show();
@@ -105,9 +106,16 @@ void Player::addFile()
 
 void Player::deleteFile()
 {
+    savePosition();
     model->removeRow(ui->tableView->currentIndex().row());
-    playlist->removeMedia(ui->tableView->currentIndex().row());
-    ui->currentTrack->setText(model->data(model->index(playlist->currentIndex(), 0)).toString());
+    playlist->removeMedia(ui->tableView->currentIndex().row()+1);
+    if(playlist->isEmpty()){
+        ui->currentTrack->setText("Current Track");
+        player->stop();
+    }
+    else{
+        ui->currentTrack->setText(model->data(model->index(playlist->currentIndex(), 0)).toString());
+    }
 }
 
 void Player::setSound()
