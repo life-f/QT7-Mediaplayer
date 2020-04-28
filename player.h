@@ -78,6 +78,10 @@ private slots:
      */
     void next();
     /**
+     * @brief pause
+     */
+    void pause();
+    /**
      * @brief stop
      */
     void stop();

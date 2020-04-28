@@ -33,7 +33,7 @@ Player::Player(QWidget *parent)
     connect(ui->play_but, &QToolButton::clicked,
             this, &Player::play);
     connect(ui->pause_but, &QToolButton::clicked,
-            player, &QMediaPlayer::pause);
+            this, &Player::pause);
     connect(ui->stop_but, &QToolButton::clicked,
             this, &Player::stop);
     connect(ui->add_but, &QToolButton::clicked,
@@ -231,6 +231,12 @@ void Player::next()
     savePosition();
     playlist->next();
     player->play();
+}
+
+void Player::pause()
+{
+    savePosition();
+    player->pause();
 }
 
 void Player::stop()
